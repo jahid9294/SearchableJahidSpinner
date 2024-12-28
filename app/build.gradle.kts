@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("maven-publish")
 }
 
 android {
@@ -10,9 +11,8 @@ android {
         applicationId = "com.example.rahim"
         minSdk = 21
         targetSdk = 34
-        versionCode = 3
-        versionName = "3.0.0"
-
+        versionCode = 4
+        versionName = "4.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -25,14 +25,31 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
-dependencies {
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            // Specify the artifact manually for application modules
+            artifact("$buildDir/outputs/apk/release/app-release.apk") {
+                classifier = "release"
+            }
+            groupId = "com.example"
+            artifactId = "rahim"
+            version = "3.0.0"
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
 
+dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
